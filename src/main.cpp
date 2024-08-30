@@ -64,6 +64,7 @@ class GameScene : public Scene {
 
     void RestartGame()
     {
+        m_TableData = MakeTable();
     }
 
     void AddMoveToTable(CellState move, int x, int y)
@@ -213,6 +214,13 @@ class GameScene : public Scene {
                 }
             }
         }
+        if (isGameOver()) {
+            if (IsKeyPressed(KEY_ENTER)) {
+                RestartGame();
+                m_ComputerWin = false;
+                m_PlayerWin = false;
+            }
+        }
     }
     void Render()
     {
@@ -220,11 +228,11 @@ class GameScene : public Scene {
         RenderTable();
         if (isGameOver()) {
             if (m_ComputerWin) {
-                DrawText("Computer win", 10, 10, 20, BLUE);
+                DrawText("Computer win (Press enter to restart)", 10, 10, 20, BLUE);
             } else if (m_PlayerWin) {
-                DrawText("Player win", 10, 10, 20, RED);
+                DrawText("Player win (Press enter to restart)", 10, 10, 20, RED);
             } else if (isGameTie())
-                DrawText("Game reached a Tie", 10, 10, 20, ORANGE);
+                DrawText("Game reached a Tie (Press enter to restart)", 10, 10, 20, ORANGE);
             else
                 DrawText("Something went really, really wrong", 10, 10, 20, GREEN);
         }
