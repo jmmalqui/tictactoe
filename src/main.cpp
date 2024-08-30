@@ -113,8 +113,8 @@ class GameScene : public Scene {
 
         if (lastMove % 2 == 0) {
             std::vector<int> rightDiagonal = { 0, 4, 8 };
-            for (int i = 0; i < 3; i++) {
-                if (m_TableData[rightDiagonal[i]] == cell) {
+            for (int index : rightDiagonal) {
+                if (m_TableData[index] == cell) {
                     count += 1;
                 }
             }
@@ -122,8 +122,8 @@ class GameScene : public Scene {
                 return true;
             count = 0;
             std::vector<int> leftDiagonal = { 2, 4, 6 };
-            for (int i = 0; i < 3; i++) {
-                if (m_TableData[leftDiagonal[i]] == cell) {
+            for (int index : leftDiagonal) {
+                if (m_TableData[index] == cell) {
                     count += 1;
                 }
             }
