@@ -1,4 +1,5 @@
 #include "mayaa.hpp"
+
 #define WINWIDTH 640
 #define WINHEIGHT 320
 #define WINTITLE "tictactoe"
@@ -13,6 +14,7 @@ enum TEAM {
     kPlayer,
     kComputer,
 };
+
 void InitializeWindow(void)
 {
     InitWindow(WINWIDTH, WINHEIGHT, WINTITLE);
@@ -23,9 +25,9 @@ std::vector<int> MakeTable(void)
 {
     std::vector<int> table;
     table.reserve(9);
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < 9; i++)
         table.push_back(kEmpty);
-    }
+        
     return table;
 }
 
@@ -71,6 +73,7 @@ class GameScene : public Scene {
     {
         m_TableData[y * 3 + x] = move;
     }
+
     Vector2 GetVectorIndexFromMousePress()
     {
         Vector2 vec;
@@ -82,56 +85,56 @@ class GameScene : public Scene {
             vec.y = (int)(3 * clickRelY / m_TableSize);
 
             return vec;
-
-        } else {
-            vec.x = -1;
-            vec.y = -1;
-            return vec;
         }
+        
+        vec.x = -1;
+        vec.y = -1;
+        return vec;
     }
 
     bool CheckWinner(int lastMove, CellState cell)
     {
         int rowCheck = lastMove - lastMove % 3;
         int count = 0;
-        for (int i = rowCheck; i < rowCheck + 3; i++) {
+        for (int i = rowCheck; i < rowCheck + 3; i++)
             if (m_TableData[i] == cell)
                 count += 1;
-        }
+        
         if (count == 3)
             return true;
         count = 0;
-
+        
         int columnCheck = lastMove % 3;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++)
             if (m_TableData[columnCheck + i * 3] == cell)
                 count += 1;
-        }
+        
         if (count == 3)
             return true;
         count = 0;
 
         if (lastMove % 2 == 0) {
             std::vector<int> rightDiagonal = { 0, 4, 8 };
-            for (int index : rightDiagonal) {
-                if (m_TableData[index] == cell) {
+            for (int index : rightDiagonal)
+                if (m_TableData[index] == cell)
                     count += 1;
-                }
-            }
+                    
             if (count == 3)
                 return true;
             count = 0;
+            
             std::vector<int> leftDiagonal = { 2, 4, 6 };
-            for (int index : leftDiagonal) {
-                if (m_TableData[index] == cell) {
+            for (int index : rightDiagonal)
+                if (m_TableData[index] == cell)
                     count += 1;
-                }
-            }
+                    
             if (count == 3)
                 return true;
+            count = 0;
         }
         return false;
     }
+
     bool isVectorIndexValid(Vector2 vec)
     {
         return vec.x != -1 && vec.y != -1;
@@ -140,14 +143,16 @@ class GameScene : public Scene {
     bool isGameTie()
     {
         int count = 0;
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++)
             if (m_TableData[i] == kEmpty)
                 count += 1;
-        }
+            
         if (count == 0 && (!m_PlayerWin || m_ComputerWin))
             return true;
+        
         return false;
     }
+
     bool isGameOver()
     {
         return (m_PlayerWin || m_ComputerWin) || isGameTie();
@@ -210,6 +215,7 @@ class GameScene : public Scene {
                 }
             }
         }
+        
         if (isGameOver()) {
             if (IsKeyPressed(KEY_ENTER)) {
                 RestartGame();
@@ -218,6 +224,7 @@ class GameScene : public Scene {
             }
         }
     }
+
     void Render()
     {
         RenderBackground();
@@ -229,10 +236,12 @@ class GameScene : public Scene {
                 DrawText("Player win (Press enter to restart)", 10, 10, 20, RED);
             } else if (isGameTie())
                 DrawText("Game reached a Tie (Press enter to restart)", 10, 10, 20, ORANGE);
-            else
+            else {
                 DrawText("Something went really, really wrong", 10, 10, 20, GREEN);
+            }
         }
     }
+
     void RenderBackground()
     {
         ClearBackground(RED);
@@ -243,21 +252,20 @@ class GameScene : public Scene {
 
         for (int x = 0; x < tileXNum; x++) {
             for (int y = 0; y < tileYNum; y++) {
-                Color backgroundTileColor = BLACK;
                 if (m_ComputerMoving)
                     backgroundTileColor = BLACK;
                 if ((x + y) % 2 == 0)
-                    if (m_ComputerMoving)
-                        backgroundTileColor = DARKBLUE;
-                    else
-                        backgroundTileColor = DARKGRAY;
+                    backgroundTileColor = m_ComputerMoving ? DARKBLUE : DARKGRAY;
+                
                 DrawRectangle(x * squareTileSize, y * squareTileSize, squareTileSize, squareTileSize, backgroundTileColor);
             }
         }
     }
+
     void RenderTable()
     {
         DrawRectangleGradientV(m_TableRec.x, m_TableRec.y, m_TableSize, m_TableSize, WHITE, LIGHTGRAY);
+        
         for (int i = 0; i < (int)m_TableData.size(); i++) {
             int cellSize = (int)(m_TableSize / 3);
             int xIndex = i % 3;
@@ -269,11 +277,12 @@ class GameScene : public Scene {
             if (m_TableData[i] == kCross)
                 DrawCircle(xCoord, yCoord, (float)(cellSize * 0.4), BLUE);
         }
+        
         DrawRectangleLinesEx(m_TableRec, 5, BLACK);
     }
 };
 
-int main(int argc, char const* argv[])
+int main()
 {
     InitializeWindow();
     SetTargetFPS(60);
@@ -281,11 +290,14 @@ int main(int argc, char const* argv[])
     GameScene game("game", &sceneManager);
     MenuScene scene("scene", &sceneManager);
     sceneManager.ChangeSceneTo("scene");
+    
     while (!WindowShouldClose()) {
         BeginDrawing();
         sceneManager.Run();
         EndDrawing();
     }
+    
     CloseWindow();
+    
     return 0;
 }
