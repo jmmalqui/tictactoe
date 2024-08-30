@@ -98,19 +98,18 @@ class GameScene : public Scene {
             if (m_TableData[i] == cell)
                 count += 1;
         }
-        if (count == 3) {
+        if (count == 3)
             return true;
-        } else
-            count = 0;
+        count = 0;
+
         int columnCheck = lastMove % 3;
         for (int i = 0; i < 3; i++) {
             if (m_TableData[columnCheck + i * 3] == cell)
                 count += 1;
         }
-        if (count == 3) {
+        if (count == 3)
             return true;
-        } else
-            count = 0;
+        count = 0;
 
         if (lastMove % 2 == 0) {
             std::vector<int> rightDiagonal = { 0, 4, 8 };
@@ -121,8 +120,7 @@ class GameScene : public Scene {
             }
             if (count == 3)
                 return true;
-            else
-                count = 0;
+            count = 0;
             std::vector<int> leftDiagonal = { 2, 4, 6 };
             for (int i = 0; i < 3; i++) {
                 if (m_TableData[leftDiagonal[i]] == cell) {
@@ -131,8 +129,6 @@ class GameScene : public Scene {
             }
             if (count == 3)
                 return true;
-            else
-                count = 0;
         }
         return false;
     }
